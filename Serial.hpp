@@ -87,7 +87,7 @@ public:
 		DirectionError = 18
 	};
 
-    Serial();
+	Serial();
 	Serial(	const QString &sPortName,
 			BaudRate BaudRate,
 			DataBits DataBits,
@@ -95,7 +95,7 @@ public:
 			Parity Parity,
 			StopBits StopBits,
 			Direction Direction);
-    ~Serial();
+	~Serial();
 
 	SerialError init(	const QString& sPortName,
 				BaudRate BaudRate,
@@ -104,7 +104,7 @@ public:
 				Parity Parity,
 				StopBits StopBits,
 				Direction Direction);
-    SerialError init(void);
+	SerialError init(void);
 
    	SerialError setPortName(const QString &sPortName);
 	QString portName(void);
