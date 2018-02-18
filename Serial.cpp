@@ -304,5 +304,15 @@ Serial::Error Serial::send(const QString& Command)
 		return Serial::Error::DeviceNotFoundError;
 	
 	_pSerialPort->write(Command.toStdString().c_str());
+
+	if(_EnableTrace)
+	{
+		if(!_pTrace)
+			_pTrace = new QVector<QString>;
+
+		_pTrace->push_back(Command);
+	}
+
+
 	return Serial::Error::NoError;
 }
