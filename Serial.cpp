@@ -10,6 +10,8 @@ Serial::Serial()
 	_Parity = Serial::Parity::UnknownParity;
 	_StopBits = Serial::StopBits::UnknownStopBits;
 	_FlowControl = Serial::FlowControl::UnknownFlowControl;
+
+	QObject::connect(_pSerialPort, SIGNAL(readyRead()), this, SLOT(DataReceive()));
 }
 
 Serial::Serial(	const QString &sPortName,
@@ -29,10 +31,13 @@ Serial::Serial(	const QString &sPortName,
 	_Parity = Parity;
 	_StopBits = StopBits;
 	_FlowControl = FlowControl;
+
+	QObject::connect(_pSerialPort, SIGNAL(readyRead()), this, SLOT(DataReceive()));
 }
 
 Serial::~Serial(void)
 {
+	QObject::disconnect(_pSerialPort, SIGNAL(readyRead()), this, SLOT(DataReceive()));
 	if(_pSerialPort)
 	{
 		delete _pSerialPort;
@@ -267,4 +272,37 @@ void Serial::close(void)
 Serial::State Serial::isOpen(void)
 {
 	return _Mode == Serial::Mode::NotOpen ? Serial::State::Close : Serial::State::Open;
+}
+
+void Serial::DataReceived(void)
+{
+	emit ReceiveData((QString)_pSerialPort->readAll());
+}
+
+void Serial::EnableTrace(void)
+{
+	_EnableTrace = true;
+}
+
+void Serial::DisableTrace(void)
+{
+	_EnableTrace = false;
+}
+
+bool Serial::ResetTrace(void)
+{
+	if(!_pTrace)
+		return false;
+	
+	_pTrace->clear();
+	return true;
+}
+
+Serial::Error Serial::send(const QString& Command)
+{
+	if(!_pSerialPort)
+		return Serial::Error::DeviceNotFoundError;
+	
+	_pSerialPort->write(Command.toStdString().c_str());
+	return Serial::Error::NoError;
 }

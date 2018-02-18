@@ -5,9 +5,13 @@
 #include <QSerialPort>
 #include <QObject>
 #include <QIODevice>
+#include <QObject>
+#include <QVector>
+#include <QString>
 
-class Serial 
+class Serial : public QObject
 {
+	Q_OBJECT
 public:
 	// Public Types
 	enum class BaudRate 
@@ -138,15 +142,29 @@ public:
 	void close(void);
 	State isOpen(void);
 
+	Error send(const QString& Command);
+
+	void EnableTrace(void);
+	void DisableTrace(void);
+	bool ResetTrace(void);
+
 private:
-	QString 		_sPortName;
-	BaudRate 		_BaudRate;
-	DataBits		_DataBits;
-	Parity			_Parity;
-	StopBits		_StopBits;
-	FlowControl		_FlowControl;
-	QSerialPort		*_pSerialPort;
-	Mode			_Mode;
+	QString 			_sPortName;
+	BaudRate 			_BaudRate;
+	DataBits			_DataBits;
+	Parity				_Parity;
+	StopBits			_StopBits;
+	FlowControl			_FlowControl;
+	QSerialPort			*_pSerialPort;
+	Mode				_Mode;
+	bool				_EnableTrace;
+	QVector<QString> 	*_pTrace;
+
+signals:
+	void ReceiveData(QString);
+
+private slots:
+	void DataReceived(void);
 };
 
 #endif // SERIAL_HPP
