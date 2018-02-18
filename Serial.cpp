@@ -83,6 +83,8 @@ Serial::Error Serial::init(void)
 	Error = setStopBits(_StopBits);
 	if(Error != Serial::Error::NoError)
 		return Error;
+
+	return Serial::Error::NoError;
 }
 
 void Serial::setPortName(const QString &sPortName)
@@ -115,6 +117,7 @@ Serial::Error Serial::setBaudRate(Serial::BaudRate BaudRate)
 			if(!_pSerialPort)
 				_pSerialPort = new QSerialPort;
 			_pSerialPort->setBaudRate((QSerialPort::BaudRate)_BaudRate);
+			return Serial::Error::NoError;
 			break;
 		default:
 			return Serial::Error::BaudRateError;
@@ -140,6 +143,7 @@ Serial::Error Serial::setDataBits(Serial::DataBits DataBits)
 			if(!_pSerialPort)
 				_pSerialPort = new QSerialPort;
 			_pSerialPort->setDataBits((QSerialPort::DataBits)_DataBits);
+			return Serial::Error::NoError;
 			break;
 		default:
 			return Serial::Error::DataBitsError;
@@ -166,6 +170,7 @@ Serial::Error Serial::setParity(Serial::Parity Parity)
 			if(!_pSerialPort)
 				_pSerialPort = new QSerialPort;
 			_pSerialPort->setParity((QSerialPort::Parity)_Parity);
+			return Serial::Error::NoError;
 			break;
 		default:
 			return Serial::Error::ParityError;
@@ -190,6 +195,7 @@ Serial::Error Serial::setStopBits(Serial::StopBits StopBits)
 			if(!_pSerialPort)
 				_pSerialPort = new QSerialPort;
 			_pSerialPort->setStopBits((QSerialPort::StopBits)_StopBits);
+			return Serial::Error::NoError;
 			break;
 		default:
 			return Serial::Error::StopBitsError;
@@ -214,6 +220,7 @@ Serial::Error Serial::setFlowControl(Serial::FlowControl FlowControl)
 			if(!_pSerialPort)
 				_pSerialPort = new QSerialPort;
 			_pSerialPort->setFlowControl((QSerialPort::FlowControl)_FlowControl);
+			return Serial::Error::NoError;
 			break;
 		default:
 			return Serial::Error::FlowControlError;
