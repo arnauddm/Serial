@@ -4,6 +4,7 @@
 #include <QSerialPortInfo>
 #include <QSerialPort>
 #include <QObject>
+#include <QIODevice>
 
 class Serial 
 {
@@ -57,14 +58,7 @@ public:
 		UnknownFlowControl = -1
 	};
 
-	enum class Direction
-	{
-		In = 1,
-		Out = 2,
-		Inout = In | Out
-	};
-
-	enum class SerialError
+	enum class Error
 	{
 		NoError = 0,
 		DeviceNotFoundError = 1,
@@ -84,7 +78,25 @@ public:
 		DataBitsError = 15,
 		StopBitsError = 16,
 		FlowControlError = 17,
-		DirectionError = 18
+		ModeError = 18
+	};
+
+	enum class Mode
+	{
+		NotOpen = 0x0000,
+		ReadOnly = 0x0001,
+		WriteOnly = 0x0002,
+		ReadWrite = ReadOnly | WriteOnly,
+		Append = 0x0004,
+		Truncate = 0x0008,
+		Text = 0x0010,
+		Unbuffered = 0x0020
+	};
+
+	enum class State
+	{
+		Open = 0,
+		Close = 1
 	};
 
 	Serial();
@@ -93,41 +105,38 @@ public:
 			DataBits DataBits,
 			FlowControl FlowControl,
 			Parity Parity,
-			StopBits StopBits,
-			Direction Direction);
+			StopBits StopBits);
 	~Serial();
 
-	SerialError init(	const QString& sPortName,
+	Error init(	const QString& sPortName,
 				BaudRate BaudRate,
 				DataBits DataBits,
 				FlowControl FlowControl,
 				Parity Parity,
-				StopBits StopBits,
-				Direction Direction);
-	SerialError init(void);
+				StopBits StopBits);
+	Error init(void);
 
-   	SerialError setPortName(const QString &sPortName);
+   	void setPortName(const QString &sPortName);
 	QString portName(void);
 
-	SerialError setBaudRate(BaudRate BaudRate);
+	Error setBaudRate(BaudRate BaudRate);
 	BaudRate baudRate(void);
 
-	SerialError setDataBits(DataBits DataBits);
+	Error setDataBits(DataBits DataBits);
 	DataBits dataBits(void);
 
-	SerialError setParity(Parity Parity);
+	Error setParity(Parity Parity);
 	Parity parity(void);
 
-	SerialError setStopBits(StopBits StopBits);
+	Error setStopBits(StopBits StopBits);
 	StopBits stopBits(void);
 
-	SerialError setFlowControl(FlowControl FlowControl);
+	Error setFlowControl(FlowControl FlowControl);
 	FlowControl flowControl(void);
 
-	SerialError setDirection(Direction Direction);
-	Direction direction(void);
-
-	bool sendCommand(const QString &command);
+	Error open(Mode Mode);
+	void close(void);
+	State isOpen(void);
 
 private:
 	QString 		_sPortName;
@@ -136,8 +145,8 @@ private:
 	Parity			_Parity;
 	StopBits		_StopBits;
 	FlowControl		_FlowControl;
-	Direction		_Direction;
 	QSerialPort		*_pSerialPort;
+	Mode			_Mode;
 };
 
 #endif // SERIAL_HPP
