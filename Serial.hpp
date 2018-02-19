@@ -1,7 +1,7 @@
 #ifndef SERIAL_HPP
 #define SERIAL_HPP
 
-//#define trace
+#define trace
 
 #include <QSerialPortInfo>
 #include <QSerialPort>

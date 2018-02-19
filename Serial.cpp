@@ -357,7 +357,12 @@ Serial::Error Serial::send(const QString& Command)
 	if(!_pSerialPort)
 		return Serial::Error::DeviceNotFoundError;
 	
-	_pSerialPort->write(Command.toStdString().c_str());
+#ifdef trace
+	bool resWrite = _pSerialPort->write(Command.toStdString().c_str());
+	qDebug() << "Written ? " << resWrite;
+#else
+	_pSerialPort->write(Command.toStdString().c_std());
+#endif
 
 	if(_EnableTrace)
 	{

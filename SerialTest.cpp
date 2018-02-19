@@ -13,7 +13,7 @@ SerialTest::SerialTest(void)
 	qDebug() << "\n\n";
 	PortSerie = new Serial;
 	qDebug() << (int)PortSerie->setPortName("cu.usbmodem1411");
-	qDebug() << (int)PortSerie->setBaudRate(Serial::BaudRate::Baud9600);
+	qDebug() << (int)PortSerie->setBaudRate(Serial::BaudRate::Baud115200);
 	qDebug() << (int)PortSerie->setDataBits(Serial::DataBits::Data8);
 	qDebug() << (int)PortSerie->setFlowControl(Serial::FlowControl::NoFlowControl);
 	qDebug() << (int)PortSerie->setStopBits(Serial::StopBits::OneStop);
@@ -27,7 +27,8 @@ SerialTest::SerialTest(void)
 						this,
 						SLOT(AfficherDonnees(QString)));
 
-	PortSerie->send("1");
+//	for(int i = 0; i < 10; i++)
+		qDebug() << (int)PortSerie->send("1");
 }
 
 void SerialTest::AfficherDonnees(QString sData)
