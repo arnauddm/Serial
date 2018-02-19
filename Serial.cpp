@@ -2,8 +2,7 @@
 
 Serial::Serial()
 {
-	if(!_pSerialPort)
-		_pSerialPort = new QSerialPort;
+	_pSerialPort = new QSerialPort;
 
 	_BaudRate = Serial::BaudRate::UnknownBaudRate;
 	_DataBits = Serial::DataBits::UnknownDataBits;
@@ -11,7 +10,7 @@ Serial::Serial()
 	_StopBits = Serial::StopBits::UnknownStopBits;
 	_FlowControl = Serial::FlowControl::UnknownFlowControl;
 
-	QObject::connect(_pSerialPort, SIGNAL(readyRead()), this, SLOT(DataReceive()));
+	QObject::connect(_pSerialPort, SIGNAL(readyRead()), this, SLOT(DataReceived()));
 }
 
 Serial::Serial(	const QString &sPortName,
@@ -22,8 +21,7 @@ Serial::Serial(	const QString &sPortName,
 				Serial::StopBits StopBits)
 
 {
-	if(!_pSerialPort)
-		_pSerialPort = new QSerialPort;
+	_pSerialPort = new QSerialPort;
 
 	_sPortName = sPortName;
 	_BaudRate = BaudRate;
@@ -92,12 +90,21 @@ Serial::Error Serial::init(void)
 	return Serial::Error::NoError;
 }
 
-void Serial::setPortName(const QString &sPortName)
+Serial::Error Serial::setPortName(QString sPortName)
 { 
+#ifdef trace
+	qDebug() << "setPortName()";
+#endif
 	_sPortName = sPortName;
 	if(!_pSerialPort)
-		_pSerialPort = new QSerialPort;
+		return Serial::Error::DeviceNotFoundError;
 	_pSerialPort->setPortName(_sPortName);
+
+#ifdef trace
+	qDebug() << "Port name : " << _sPortName;
+#endif
+
+	return Serial::Error::NoError;
 }
 
 QString Serial::portName(void)
@@ -107,6 +114,10 @@ QString Serial::portName(void)
 
 Serial::Error Serial::setBaudRate(Serial::BaudRate BaudRate)
 {
+#ifdef trace
+	qDebug() << "setBaudRate()";
+	qDebug() << "BaudRate : " << (int)BaudRate;
+#endif
 	switch(BaudRate)
 	{
 		case Serial::BaudRate::Baud1200:
@@ -120,11 +131,14 @@ Serial::Error Serial::setBaudRate(Serial::BaudRate BaudRate)
 		case Serial::BaudRate::UnknownBaudRate:
 			_BaudRate = BaudRate;
 			if(!_pSerialPort)
-				_pSerialPort = new QSerialPort;
+				return Serial::Error::DeviceNotFoundError;
 			_pSerialPort->setBaudRate((QSerialPort::BaudRate)_BaudRate);
 			return Serial::Error::NoError;
 			break;
 		default:
+#ifdef trace
+			qDebug() << "BaudRate error";
+#endif
 			return Serial::Error::BaudRateError;
 			break;
 	}
@@ -137,6 +151,10 @@ Serial::BaudRate Serial::baudRate(void)
 
 Serial::Error Serial::setDataBits(Serial::DataBits DataBits)
 {
+#ifdef trace
+	qDebug() << "setDataBits()";
+	qDebug() << "DataBits : " << (int)DataBits;
+#endif
 	switch(DataBits)
 	{
 		case Serial::DataBits::Data5:
@@ -146,11 +164,14 @@ Serial::Error Serial::setDataBits(Serial::DataBits DataBits)
 		case Serial::DataBits::UnknownDataBits:
 			_DataBits = DataBits;
 			if(!_pSerialPort)
-				_pSerialPort = new QSerialPort;
+				return Serial::Error::DeviceNotFoundError;
 			_pSerialPort->setDataBits((QSerialPort::DataBits)_DataBits);
 			return Serial::Error::NoError;
 			break;
 		default:
+#ifdef trace
+			qDebug() << "DataBits error";
+#endif
 			return Serial::Error::DataBitsError;
 			break;
 	}
@@ -163,6 +184,10 @@ Serial::DataBits Serial::dataBits(void)
 
 Serial::Error Serial::setParity(Serial::Parity Parity)
 {
+#ifdef trace
+	qDebug() << "setParity()";
+	qDebug() << "Parity : " << (int)Parity;
+#endif
 	switch(Parity)
 	{
 		case Serial::Parity::NoParity:
@@ -173,11 +198,14 @@ Serial::Error Serial::setParity(Serial::Parity Parity)
 		case Serial::Parity::UnknownParity:
 			_Parity = Parity;
 			if(!_pSerialPort)
-				_pSerialPort = new QSerialPort;
+				return Serial::Error::DeviceNotFoundError;
 			_pSerialPort->setParity((QSerialPort::Parity)_Parity);
 			return Serial::Error::NoError;
 			break;
 		default:
+#ifdef trace
+			qDebug() << "Parity error";
+#endif
 			return Serial::Error::ParityError;
 			break;
 	}
@@ -190,6 +218,10 @@ Serial::Parity Serial::parity(void)
 
 Serial::Error Serial::setStopBits(Serial::StopBits StopBits)
 {
+#ifdef trace
+	qDebug() << "setStopBits()";
+	qDebug() << "StopBits : " << (int)StopBits;
+#endif
 	switch(StopBits)
 	{
 		case Serial::StopBits::OneStop:
@@ -198,11 +230,14 @@ Serial::Error Serial::setStopBits(Serial::StopBits StopBits)
 		case Serial::StopBits::UnknownStopBits:
 			_StopBits = StopBits;
 			if(!_pSerialPort)
-				_pSerialPort = new QSerialPort;
+				return Serial::Error::DeviceNotFoundError;
 			_pSerialPort->setStopBits((QSerialPort::StopBits)_StopBits);
 			return Serial::Error::NoError;
 			break;
 		default:
+#ifdef trace
+			qDebug() << "StopBits error";
+#endif
 			return Serial::Error::StopBitsError;
 			break;
 	}
@@ -215,6 +250,10 @@ Serial::StopBits Serial::stopBits(void)
 
 Serial::Error Serial::setFlowControl(Serial::FlowControl FlowControl)
 {
+#ifdef trace
+	qDebug() << "setFlowControl()";
+	qDebug() << "FlowControl : " << (int)FlowControl;
+#endif
 	switch(FlowControl)
 	{
 		case Serial::FlowControl::NoFlowControl:
@@ -223,11 +262,14 @@ Serial::Error Serial::setFlowControl(Serial::FlowControl FlowControl)
 		case Serial::FlowControl::UnknownFlowControl:
 			_FlowControl = FlowControl;
 			if(!_pSerialPort)
-				_pSerialPort = new QSerialPort;
+				return Serial::Error::DeviceNotFoundError;
 			_pSerialPort->setFlowControl((QSerialPort::FlowControl)_FlowControl);
 			return Serial::Error::NoError;
 			break;
 		default:
+#ifdef trace
+			qDebug() << "FlowControl error";
+#endif
 			return Serial::Error::FlowControlError;
 			break;
 	}
@@ -240,6 +282,11 @@ Serial::FlowControl Serial::flowControl(void)
 
 Serial::Error Serial::open(Serial::Mode Mode)
 {
+#ifdef trace
+	qDebug() << "open() : " << _pSerialPort;
+	qDebug() << "Mode : " << (int)Mode;
+#endif
+	bool resOpen;
 	switch(Mode)
 	{
 		case Serial::Mode::NotOpen:
@@ -251,14 +298,21 @@ Serial::Error Serial::open(Serial::Mode Mode)
 		case Serial::Mode::Text:
 		case Serial::Mode::Unbuffered:
 			_Mode = Mode;
-			if(_pSerialPort)
-				_pSerialPort = new QSerialPort;
-			if(_pSerialPort->open((QIODevice::OpenModeFlag)Mode))
+			if(!_pSerialPort)
+				return Serial::Error::DeviceNotFoundError;
+			resOpen = _pSerialPort->open((QIODevice::OpenModeFlag)_Mode);
+#ifdef trace
+			qDebug() << "Open state : " << resOpen;
+#endif
+			if(resOpen)
 				return Serial::Error::NoError;
 			else
 				return Serial::Error::OpenError;
 			break;
 		default:
+#ifdef trace
+		qDebug() << "open() error parameters";
+#endif
 			return Serial::Error::ModeError;
 			break;
 	}
@@ -269,9 +323,9 @@ void Serial::close(void)
 	_pSerialPort->close();
 }
 
-Serial::State Serial::isOpen(void)
+bool Serial::isOpen(void)
 {
-	return _Mode == Serial::Mode::NotOpen ? Serial::State::Close : Serial::State::Open;
+	return _pSerialPort->isOpen();
 }
 
 void Serial::DataReceived(void)
@@ -312,7 +366,6 @@ Serial::Error Serial::send(const QString& Command)
 
 		_pTrace->push_back(Command);
 	}
-
 
 	return Serial::Error::NoError;
 }

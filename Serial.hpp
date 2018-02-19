@@ -1,6 +1,8 @@
 #ifndef SERIAL_HPP
 #define SERIAL_HPP
 
+//#define trace
+
 #include <QSerialPortInfo>
 #include <QSerialPort>
 #include <QObject>
@@ -8,6 +10,7 @@
 #include <QObject>
 #include <QVector>
 #include <QString>
+#include <QDebug>
 
 class Serial : public QObject
 {
@@ -120,7 +123,7 @@ public:
 				StopBits StopBits);
 	Error init(void);
 
-   	void setPortName(const QString &sPortName);
+   	Error setPortName(QString sPortName);
 	QString portName(void);
 
 	Error setBaudRate(BaudRate BaudRate);
@@ -140,7 +143,7 @@ public:
 
 	Error open(Mode Mode);
 	void close(void);
-	State isOpen(void);
+	bool isOpen(void);
 
 	Error send(const QString& Command);
 
