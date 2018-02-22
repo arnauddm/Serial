@@ -147,10 +147,11 @@ public:
 
 	Error send(const QString& Command);
 
-	void EnableTrace(void);
-	void DisableTrace(void);
-	bool ResetTrace(void);
+	void enableTrace(void);
+	void disableTrace(void);
+	bool resetTrace(void);
 
+	QString scan(void);
 private:
 	QString 			_sPortName;
 	BaudRate 			_BaudRate;

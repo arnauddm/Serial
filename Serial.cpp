@@ -333,17 +333,17 @@ void Serial::DataReceived(void)
 	emit ReceiveData((QString)_pSerialPort->readAll());
 }
 
-void Serial::EnableTrace(void)
+void Serial::enableTrace(void)
 {
 	_EnableTrace = true;
 }
 
-void Serial::DisableTrace(void)
+void Serial::disableTrace(void)
 {
 	_EnableTrace = false;
 }
 
-bool Serial::ResetTrace(void)
+bool Serial::resetTrace(void)
 {
 	if(!_pTrace)
 		return false;
@@ -373,4 +373,23 @@ Serial::Error Serial::send(const QString& Command)
 	}
 
 	return Serial::Error::NoError;
+}
+
+QString Serial::scan(void)
+{
+	QString scan = "";
+	foreach (
+			const QSerialPortInfo &info, QSerialPortInfo::availablePorts()
+			) {
+		scan += "Port Name : " + info.portName() + "\n";
+		scan += "Description : " + info.description() + "\n";
+		scan += "Manufacturer : " + info.manufacturer() + "\n";
+		scan += "Serial Number : " + info.serialNumber() + "\n";
+		scan + "System Location : " + info.systemLocation() + "\n";
+		scan += "\n\n";
+	}
+	
+	// remove the 2 last \n
+	scan.remove(scan.size() - 2, 2);
+	return scan;
 }
