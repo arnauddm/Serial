@@ -123,33 +123,33 @@ public:
 				StopBits StopBits);
 	Error init(void);
 
-	inline Error setPortName(QString sPortName);
-	inline QString portName(void);
+	Error setPortName(QString sPortName);
+	QString portName(void);
 
-	inline Error setBaudRate(BaudRate BaudRate);
-	inline BaudRate baudRate(void);
+	Error setBaudRate(BaudRate BaudRate);
+	BaudRate baudRate(void);
 
-	inline Error setDataBits(DataBits DataBits);
-	inline DataBits dataBits(void);
+	Error setDataBits(DataBits DataBits);
+	DataBits dataBits(void);
 
-	inline Error setParity(Parity Parity);
-	inline Parity parity(void);
+	Error setParity(Parity Parity);
+	Parity parity(void);
 
-	inline Error setStopBits(StopBits StopBits);
-	inline StopBits stopBits(void);
+	Error setStopBits(StopBits StopBits);
+	StopBits stopBits(void);
 
-	inline Error setFlowControl(FlowControl FlowControl);
-	inline FlowControl flowControl(void);
+	Error setFlowControl(FlowControl FlowControl);
+	FlowControl flowControl(void);
 
-	inline Error open(Mode Mode);
-	inline void close(void);
-	inline bool isOpen(void);
+	Error open(Mode Mode);
+	void close(void);
+	bool isOpen(void);
 
 	Error send(const QString& Command);
 
-	inline void enableTrace(void);
-	inline void disableTrace(void);
-	inline bool resetTrace(void);
+	void enableTrace(void);
+	void disableTrace(void);
+	bool resetTrace(void);
 
 	QString scan(void);
 private:

@@ -38,6 +38,8 @@ Serial::~Serial(void)
 	QObject::disconnect(_pSerialPort, SIGNAL(readyRead()), this, SLOT(DataReceive()));
 	if(_pSerialPort)
 	{
+		if(_pSerialPort->isOpen())
+			_pSerialPort->close();
 		delete _pSerialPort;
 		_pSerialPort = NULL;
 	}
