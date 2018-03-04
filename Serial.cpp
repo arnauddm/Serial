@@ -35,7 +35,7 @@ Serial::Serial(	const QString &sPortName,
 
 Serial::~Serial(void)
 {
-	QObject::disconnect(_pSerialPort, SIGNAL(readyRead()), this, SLOT(DataReceive()));
+	//QObject::disconnect(_pSerialPort, SIGNAL(readyRead()), this, SLOT(DataReceive()));
 	if(_pSerialPort)
 	{
 		if(_pSerialPort->isOpen())
@@ -43,7 +43,6 @@ Serial::~Serial(void)
 		delete _pSerialPort;
 		_pSerialPort = NULL;
 	}
-    delete this;
 }
 
 Serial::Error Serial::init(	const QString &sPortName,
