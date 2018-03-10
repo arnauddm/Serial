@@ -331,7 +331,13 @@ bool Serial::isOpen(void)
 
 void Serial::DataReceived(void)
 {
-	emit ReceiveData((QString)_pSerialPort->readAll());
+	QString sDataReceive = _pSerialPort->readAll();
+
+#ifdef trace
+	qDebug() << "Serial::DataReceive => lib receive data from SerialPort : " + sDataReceive;
+#endif
+
+	emit ReceiveData(sDataReceive);
 }
 
 void Serial::enableTrace(void)
@@ -362,7 +368,7 @@ Serial::Error Serial::send(const QString& Command)
 	bool resWrite = _pSerialPort->write(Command.toStdString().c_str());
 	qDebug() << "Written ? " << resWrite;
 #else
-	_pSerialPort->write(Command.toStdString().c_std());
+	_pSerialPort->write(Command.toStdString().c_str());
 #endif
 
 	if(_EnableTrace)
